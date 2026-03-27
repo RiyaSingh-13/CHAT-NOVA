@@ -8,14 +8,8 @@ import { ChatContext } from "../../context/ChatContext.jsx";
 import { useContext } from "react";
 
 const Sidebar = () => {
-  const {
-    getUsers,
-    users,
-    selectedUser,
-    setSelectedUser,
-    unseenMessages,
-    setUnseenMessages,
-  } = useContext(ChatContext);
+  const { getUsers, users, selectedUser, setSelectedUser, unseenMessages } =
+    useContext(ChatContext);
 
   const { logout, onlineUsers: _onlineUsers } = useContext(AuthContext);
   const onlineUsers = Array.isArray(_onlineUsers) ? _onlineUsers : [];
@@ -83,7 +77,8 @@ const Sidebar = () => {
           <div
             onClick={() => {
               setSelectedUser(user);
-              setUnseenMessages((prev) => ({ ...prev, [user._id]: 0 }));
+              // Optionally, refresh users to update unseenMessages if needed
+              getUsers();
             }}
             key={index}
             className={`relative flex items-center gap-2 p-2 pl-4 rounded cursor-pointer max:text-sm' + (selectUser?._id === user._id &&' bg-[#28214]/50' ')`}
@@ -95,11 +90,23 @@ const Sidebar = () => {
             />
             <div className="flex flex-col leading-5">
               <p>{user.fullName}</p>
-              {onlineUsers.includes(String(user._id)) ? (
-                <span className="text-green-400 text-xs">Online</span>
-              ) : (
-                <span className="text-gray-400 text-xs">Offline</span>
-              )}
+              {(() => {
+                const userIdStr = String(user._id);
+                const isOnline = onlineUsers.includes(userIdStr);
+                console.log(
+                  `[Sidebar] Checking userId:`,
+                  userIdStr,
+                  "in onlineUsers:",
+                  onlineUsers,
+                  "=>",
+                  isOnline,
+                );
+                return isOnline ? (
+                  <span className="text-green-400 text-xs">Online</span>
+                ) : (
+                  <span className="text-gray-400 text-xs">Offline</span>
+                );
+              })()}
             </div>
             {unseenMessages[user._id] > 0 && (
               <p className="absolute top-4 right-4 text-xs h-5 w-5 flex justify-center items-center rounded-full bg-green-500/50">
