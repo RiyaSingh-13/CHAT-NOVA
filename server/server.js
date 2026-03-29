@@ -54,7 +54,5 @@ const startServer = async () => {
   }
 };
 
-if (process.env.NODE_ENV !== "production") {
 startServer();
-}
 export default server;
