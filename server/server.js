@@ -1,4 +1,3 @@
-
 import express from "express";
 import "dotenv/config";
 import cors from "cors";
@@ -62,11 +61,6 @@ const startServer = async () => {
     process.exit(1);
   }
 };
-
-if (process.env.VERCEL === "1" || require.main === module) {
-  startServer();
-}
-export default server;
 
 if (process.env.VERCEL === "1" || require.main === module) {
   startServer();
