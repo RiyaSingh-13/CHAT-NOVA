@@ -32,7 +32,7 @@ export const signup = async (req, res) => {
       message: "Account created successfully",
     });
   } catch (error) {
-    console.log({ error: error.message });
+    console.error("Signup error:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -53,7 +53,7 @@ export const login = async (req, res) => {
     const token = generateToken(userData._id);
     res.json({ success: true, userData, token, message: "Login successfully" });
   } catch (error) {
-    console.log({ error: error.message });
+    console.error("Login error:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
