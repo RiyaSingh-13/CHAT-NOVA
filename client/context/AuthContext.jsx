@@ -18,7 +18,9 @@ export const AuthProvider = ({ children }) => {
   // check if user is authenticated or not,so if so ,set the user data and connect the socket
   const checkAuth = async () => {
     try {
-      const { data } = await axios.get("/api/auth/check");
+      const { data } = await axios.get("/api/auth/check", {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
       if (data.success) {
         setAuthUser(data.user);
         connectSocket(data.user);
@@ -35,7 +37,7 @@ export const AuthProvider = ({ children }) => {
       if (data.success) {
         setAuthUser(data.user);
         connectSocket(data.user);
-        axios.defaults.headers.common["token"] = data.token;
+        axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
         setToken(data.token);
         localStorage.setItem("token", data.token);
         toast.success(data.message);
@@ -52,7 +54,7 @@ export const AuthProvider = ({ children }) => {
     setAuthUser(null);
     setToken(null);
     setOnlineUsers([]);
-    axios.defaults.headers.common["token"] = null;
+    delete axios.defaults.headers.common["Authorization"];
     toast.success("Logged out successfully");
     socket?.disconnect();
   };
@@ -89,10 +91,13 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (token) {
-      axios.defaults.headers.common["token"] = token;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    } else {
+      delete axios.defaults.headers.common["Authorization"];
     }
     checkAuth();
-  }, []);
+    // eslint-disable-next-line
+  }, [token]);
 
   const value = {
     axios,
