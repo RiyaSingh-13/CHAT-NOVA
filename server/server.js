@@ -1,3 +1,4 @@
+
 import express from "express";
 import "dotenv/config";
 import cors from "cors";
@@ -10,8 +11,16 @@ import { Server } from "socket.io";
 // create express app and http server
 const app = express();
 const server = http.createServer(app);
-// initialize socket.io server
 
+// CORS as the very first middleware
+const corsOptions = {
+  origin: "https://chat-nova-b.vercel.app",
+  credentials: true,
+};
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
+
+// initialize socket.io server
 export const io = new Server(server, {
   cors: { origin: "*" },
 });
@@ -32,15 +41,10 @@ io.on("connection", (socket) => {
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
   });
 });
-// middleware setup
 
+// middleware setup
 app.use(express.json({ limit: "4mb" }));
-app.use(
-  cors({
-    origin: "https://chat-nova-b.vercel.app",
-    credentials: true,
-  }),
-);
+
 // route setup
 app.use("/api/status", (req, res) => res.send("server is live"));
 app.use("/api/auth", userRouter);
@@ -58,6 +62,11 @@ const startServer = async () => {
     process.exit(1);
   }
 };
+
+if (process.env.VERCEL === "1" || require.main === module) {
+  startServer();
+}
+export default server;
 
 if (process.env.VERCEL === "1" || require.main === module) {
   startServer();
