@@ -59,5 +59,7 @@ const startServer = async () => {
   }
 };
 
-startServer();
+if (process.env.VERCEL === "1" || require.main === module) {
+  startServer();
+}
 export default server;
