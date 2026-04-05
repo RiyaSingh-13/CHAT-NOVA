@@ -26,7 +26,10 @@ export const AuthProvider = ({ children }) => {
         connectSocket(data.user);
       }
     } catch (error) {
-      toast.error(error.message);
+      setAuthUser(null);
+      setToken(null);
+      localStorage.removeItem("token");
+      toast.error("Session expired. Please log in again.");
     }
   };
   // login fucntion to handle user authentication and socket connection
@@ -92,10 +95,11 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (token) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      checkAuth();
     } else {
       delete axios.defaults.headers.common["Authorization"];
+      setAuthUser(null);
     }
-    checkAuth();
     // eslint-disable-next-line
   }, [token]);
 

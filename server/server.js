@@ -12,7 +12,10 @@ const app = express();
 const server = http.createServer(app);
 
 // CORS as the very first middleware
-const allowedOrigins = ["https://chat-nova-b.vercel.app"];
+const allowedOrigins = [
+  "https://chat-nova-b.vercel.app",
+  "http://localhost:5174",
+];
 const corsOptions = {
   origin: function (origin, callback) {
     // allow requests with no origin (like mobile apps, curl, etc.)
@@ -26,7 +29,6 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
 
 // initialize socket.io server
 export const io = new Server(server, {
@@ -71,7 +73,5 @@ const startServer = async () => {
   }
 };
 
-if (process.env.VERCEL === "1" || require.main === module) {
-  startServer();
-}
+startServer();
 export default server;
