@@ -13,8 +13,9 @@ const server = http.createServer(app);
 
 // CORS as the very first middleware
 const allowedOrigins = [
-  "https://chat-nova-b.vercel.app",
-  "http://localhost:5174",
+  "https://chat-nova-b.vercel.app", // keep if needed
+  "http://localhost:5174", // for local dev
+  "https://chat-nova-fd.onrender.com", // deployed frontend
 ];
 const corsOptions = {
   origin: function (origin, callback) {
