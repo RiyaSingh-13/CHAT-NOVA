@@ -7,9 +7,11 @@ export const connectDB = async () => {
     mongoose.connection.on("connected", () => {
       console.log(" Database Connected ");
     });
-    // Use the full connection string from .env, including the database name
-    await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(process.env.MONGO_URI, {
+      serverSelectionTimeoutMS: 10000,
+    });
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
+    throw error;
   }
 };
