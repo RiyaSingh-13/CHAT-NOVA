@@ -3,7 +3,11 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { io } from "socket.io-client";
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+const configuredBackendUrl = import.meta.env.VITE_BACKEND_URL;
+const backendUrl =
+  configuredBackendUrl?.includes("chat-nova-f.vercel.app")
+    ? "https://chat-nova-bk.onrender.com"
+    : configuredBackendUrl || "http://localhost:5000";
 
 axios.defaults.baseURL = backendUrl;
 
