@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "ChatNova",
+    "slug": "chat-nova",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0c0a1a",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.chatnova.app",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "ChatNova needs access to your photos to share images in messages and update your profile picture.",
+        "NSCameraUsageDescription": "ChatNova needs access to your camera to take profile and chat photos."
+      }
+    },
+    "android": {
+      "package": "com.chatnova.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#0c0a1a",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "permissions": [
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "CAMERA"
+      ]
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow ChatNova to access your photos to send images in chat and update your profile."
+        }
+      ]
+    ],
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}

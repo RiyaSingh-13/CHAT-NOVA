@@ -4,10 +4,8 @@ import axios from "axios";
 import { io } from "socket.io-client";
 
 const backendUrl =
-  import.meta.env.VITE_BACKEND_URL?.includes("chat-nova-f.vercel.app")
-    ? "https://chat-nova-bk.onrender.com"
-    : import.meta.env.VITE_BACKEND_URL ||
-      (import.meta.env.DEV ? "http://localhost:5000" : "https://chat-nova-bk.onrender.com");
+  import.meta.env.VITE_BACKEND_URL ||
+  (import.meta.env.DEV ? "http://localhost:5001" : "https://chat-nova-bk.onrender.com");
 
 axios.defaults.baseURL = backendUrl;
 

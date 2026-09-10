@@ -1,3 +1,4 @@
+
 import express from "express";
 import "dotenv/config";
 import cors from "cors";
@@ -14,14 +15,23 @@ const server = http.createServer(app);
 // CORS as the very first middleware
 const allowedOrigins = [
   process.env.FRONTEND_URL, // Use env variable for deployed frontend
-  "http://localhost:5174", // for local dev
+  "http://localhost:5173", // for local dev (Vite default)
+  "http://localhost:5174", // for local dev (alternative)
+  "http://localhost:8081", // for Expo web
   "https://chat-nova-b.vercel.app", // keep if needed
 ].filter(Boolean); // Remove undefined values
+
 const corsOptions = {
   origin: function (origin, callback) {
     // allow requests with no origin (like mobile apps, curl, etc.)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    if (
+      allowedOrigins.indexOf(origin) !== -1 ||
+      origin.startsWith("http://localhost:") ||
+      origin.startsWith("http://127.0.0.1:") ||
+      origin.startsWith("http://192.168.") ||
+      origin.startsWith("http://10.0.")
+    ) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
@@ -64,10 +74,28 @@ app.use("/api/messages", messageRouter);
 // connect to mongodb and start server
 const PORT = process.env.PORT || 5000;
 
+const handleServerError = (error) => {
+  if (error.syscall !== "listen") {
+    console.error("Server error:", error);
+    process.exit(1);
+  }
+
+  if (error.code === "EADDRINUSE") {
+    console.error(`Port ${PORT} is already in use. Stop the other process or set a different PORT.`);
+    process.exit(1);
+  }
+
+  console.error("Server error:", error);
+  process.exit(1);
+};
+
+server.on("error", handleServerError);
+
 const startServer = async () => {
   try {
     await connectDB();
-    server.listen(PORT, () => console.log(`server is running on port ${PORT}`));
+    server.listen(PORT, () => console.log(`server is running on port ${PORT} at localhost:${PORT}`));
+
   } catch (err) {
     console.error("Failed to start server:", err);
     process.exit(1);
