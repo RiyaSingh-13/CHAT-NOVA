@@ -18,6 +18,7 @@ const allowedOrigins = [
   "http://localhost:5173", // for local dev (Vite default)
   "http://localhost:5174", // for local dev (alternative)
   "http://localhost:8081", // for Expo web
+  "https://chat-nova-fd.onrender.com", // Deployed Render frontend
   "https://chat-nova-b.vercel.app", // keep if needed
 ].filter(Boolean); // Remove undefined values
 
